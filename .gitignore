@@ -1,0 +1,34 @@
+# Node.js specific
+node_modules/
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Logs
+logs/
+*.log
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.pnpm
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variables file
+.env
+
+# Build output
+dist/
+build/
+
+# IDE specific
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
