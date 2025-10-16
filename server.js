@@ -4,7 +4,7 @@ dotenv.config();
 
 // Enable Cross-Origin Resource Sharing (CORS)
 import cors from 'cors';
-
+import { connectToDB } from './db.js';
 import express from 'express';
 import taskCRUDRoutes from './src/routes/taskRoutes.js';
 
@@ -22,6 +22,19 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on ${api_uri}`);
+// Connect to the database and then start the server
+
+(async () => {
+  
+  console.log("Starting database connection...");
+  try {
+    await connectToDB();
+    console.log("Database connection successful. Starting server...");
+    app.listen(port, () => {
+  console.log(`Server listening on ${api_uri}`);
 });
+
+  } catch (error) {
+    console.error("Error connecting to database:", error);
+  }
+})();
