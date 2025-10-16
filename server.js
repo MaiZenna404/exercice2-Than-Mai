@@ -6,7 +6,7 @@ dotenv.config();
 import cors from 'cors';
 
 import express from 'express';
-import taskCRUDRoutes from './routes/taskRoutes.js';
+import taskCRUDRoutes from './src/routes/taskRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
