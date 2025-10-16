@@ -5,23 +5,33 @@
  * { id: string, title: string, description: string }
  */
 
-const tasks = []; // List task empty by default
-
-const findIdTask = (id) => tasks.find(task => task.id === id);
-const addTask = (task) => tasks.push(task);
-const deleteTask = (id) => {
-    const taskIndex = tasks.findIndex(task => task.id === id);
-    // Remove task if id found
-    if (taskIndex !== -1) {
-        tasks.splice(taskIndex, 1);
-        return true;
+class TaskModel {
+    constructor() {
+        this.tasks = []; // empty list by default
     }
-    return false;
-};
 
-export default {
-    tasks,
-    findIdTask,
-    addTask,
-    deleteTask
-};
+    // Find a task by its ID
+    findIdTask(id) {
+        return this.tasks.find(task => task.id === id);
+    }
+
+    // Add a new task
+    addTask(task) {
+        this.tasks.push(task);
+    }
+
+    // Delete a task by its ID
+    deleteTask(id) {
+        const taskIdx = this.findIdTask(id);
+        taskIdx ? this.tasks.splice(this.tasks.indexOf(taskIdx), 1) : false;
+        return taskIdx ? true : false;
+    }
+
+    // fetch all tasks
+    fetchAllTasks() {
+        return this.tasks;
+    }
+
+}
+
+export default new TaskModel();
