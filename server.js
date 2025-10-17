@@ -4,7 +4,8 @@ dotenv.config();
 
 // Enable Cross-Origin Resource Sharing (CORS)
 import cors from 'cors';
-import { connectToDB } from './db.js';
+import { connectToDB } from './dbConnections/mongoDb/db.js'; // uncomment this line to use MongoDB
+import { connectToDB as connectToPostgresDB } from './dbConnections/postgreSQL/db.js';
 import express from 'express';
 import taskCRUDRoutes from './src/routes/taskRoutes.js';
 
@@ -28,7 +29,7 @@ app.get('/', (req, res) => {
   
   console.log("Starting database connection...");
   try {
-    await connectToDB();
+    await connectToPostgresDB();
     console.log("Database connection successful. Starting server...");
     app.listen(port, () => {
   console.log(`Server listening on ${api_uri}`);
