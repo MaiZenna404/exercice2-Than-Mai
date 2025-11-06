@@ -18,17 +18,23 @@ This project does follow the MVC (Model-View-Controller) architecture pattern, w
 
 Project Root
 ├── server.js              # Entry point of the application
-├── .env                    # Environment variables
-├── controllers/            # Handles application logic
-│   └── taskControllers.js  # Task Controllers
-├── models/                 # Manages data and business logic
-│   └── taskModel.js        # Task Model
-├── routes/                 # Defines API endpoints
-│   └── taskRoutes.js       # Task CRUD Routes
-├── data/                   # (Optional) Stores in-memory data
-│   └── tasks.js            # In-memory task storage (if used)
-├── package.json            # Project metadata and dependencies
-├── README.md               # Project documentation
+├── .env                   # Environment variables
+├── dbConnections          # Manages database connections (MongoDB and PostgreSQL)
+│   ├── mongoDb
+│   │   └── db.js          # MongoDB connection setup
+│   └── postgreSQL
+│       └── db.js          # PostgreSQL connection setup
+├── src                    # Handles application logic
+│   ├── controllers/       # Handles application logic
+│   │   └── taskControllers.js   # Task Controllers
+│   ├── models/            # Manages data and business logic
+│   │   └── taskModel.js   # Task Model
+│   ├── routes/            # Defines API endpoints
+│   └── taskRoutes.js      # Task CRUD Routes
+├── data/                  # (Optional) Stores in-memory data
+│   └── tasks.js           # In-memory task storage (if used)
+├── package.json           # Project metadata and dependencies
+├── README.md              # Project documentation
 
 ```
 
@@ -52,11 +58,22 @@ Project Root
    ```
 
 ### Setting Up Environment Variables
-Create a `.env` file in the root directory and add the following environment variables:
+First, create a `.env` file in the root directory and add the following environment variables:
 ```
 PORT=3000
 LOCALHOST_URI=http://localhost:
 
+```
+
+Then, depending on your database choice, add the respective database connection string:
+
+For MongoDB:
+```
+MONGODB_URI=mongodb://localhost:27017/tasks_db
+```
+For PostgreSQL:
+```   
+POSTGRES_URI=postgresql://postgres:Adm1n1234@localhost:5432/db_tasks
 ```
 #### API Endpoints
 - **GET /tasks**: Retrieve the list of all tasks.
