@@ -5,11 +5,13 @@
  * { id: string, title: string, description: string }
  */
 
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
 /**
  * Define the Mongoose schema for tasks
  */
+
+/*
 
 const tasksSchema = new mongoose.Schema({
     title: {
@@ -38,6 +40,7 @@ class TaskModel {
         this.tasks = []; // empty list by default
     }
     */
+/*
     
     // Fetch all tasks
     async fetchAllTasks() {
@@ -82,6 +85,67 @@ class TaskModel {
         }
     }
 
+}
+
+export default new TaskModel();
+/* → Uncomment all lines above to use MongoDB with Mongoose ← */
+
+// Implementaiton with PostgreSQL below
+import pool from "../../dbConnections/postgreSQL/db.js";
+
+class TaskModel {
+  // fetch all tasks
+  async fetchAllTasks() {
+    try {
+        const res = await pool.query('SELECT * FROM tasks;');
+        return res.rows;
+    } catch (error) {
+        console.error("Database query error:", error.message); // Log the error message
+        throw new Error("Error fetching tasks: " + error.message); // Include the error message
+    }
+    }
+    
+     // find a task by ID
+  async findIdTask(id) {
+    try {
+      const res = await pool.query("SELECT * FROM tasks WHERE id = $1", [id]);
+      return res.rows[0] || null;
+    } catch (error) {
+      console.error("Database query error:", error.message);
+      throw new Error("Error finding task: " + error.message);
+    }
+  }
+
+  // add a new task
+  async addTask(task) {
+    const { title, description } = task;
+    if (!title) throw new Error("Task title is required");
+    try {
+        console.log("Inserting task:", task); // Log the task being inserted
+        const res = await pool.query(
+            'INSERT INTO tasks (title, description) VALUES ($1, $2) RETURNING *;',
+            [title, description]
+        );
+        console.log("Task inserted successfully:", res.rows[0]); // Log the inserted task
+        return res.rows[0];
+    } catch (error) {
+        console.error("Database query error:", error.message); // Log the error message
+        throw new Error("Error adding task: " + error.message); // Include the error message
+    }
+  }
+
+  // Delete a task by ID
+  async deleteTask(id) {
+    try {
+      const res = await pool.query(
+        'DELETE FROM tasks WHERE id = $1 RETURNING *;',
+        [id]
+      );
+      return res.rowCount > 0;
+    } catch (error) {
+      throw new Error("Error deleting task: " + error.message);
+    }
+  }
 }
 
 export default new TaskModel();

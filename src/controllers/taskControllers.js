@@ -1,32 +1,46 @@
-import TaskModel  from '../models/taskModel.js';
-import { v4 as uuidv4 } from 'uuid'; // module to generate unique IDs
+import TaskModel from '../models/taskModel.js';
 
-// Controller to handle CRUD operation on task model
+// Controller to handle CRUD operations on task model
 
-export const getTasks = (_req, res) => {
-    const allTasks = TaskModel.fetchAllTasks();
-    if (allTasks.length === 0) {
-        return res.status(404).json({ message: 'No tasks found in the list' });
+export const getTasks = async (_req, res) => {
+    try {
+        const allTasks = await TaskModel.fetchAllTasks();
+        if (allTasks.length === 0) {
+            return res.status(404).json({ message: 'No tasks found in the list' });
+        }
+        res.status(200).json({ message: 'Tasks List successfully fetched', tasks: allTasks });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching tasks', error: error.message });
     }
-    res.status(200).json({ message: 'Tasks List successfully fetched', tasks: allTasks });
 };
 
-export const addTask = (req, res) => {
+export const addTask = async (req, res) => {
     const { title, description } = req.body;
     if (!title) {
         return res.status(400).json({ message: 'A title is required for your new task' });
     }
-    const newTask = { id: uuidv4(), title, description };
-    TaskModel.addTask(newTask);
-    res.status(201).json({ message: 'Task added successfully to the list', task: newTask });
+    try {
+        const newTask = await TaskModel.addTask({ title, description });
+        res.status(201).json({ message: 'Task added successfully to the list', task: newTask });
+    } catch (error) {
+        res.status(500).json({ message: 'Error adding task', error: error.message });
+    }
 };
 
-export const deleteTask = (req, res) => {
+export const deleteTask = async (req, res) => {
     const { id } = req.params;
-    const taskIndex = TaskModel.findIdTask(id);
-    if (taskIndex === -1) {
-        return res.status(404).json({ message: `Task with id ${id} not found` });
+    try {
+        const task = await TaskModel.findIdTask(id);
+        if (!task) {
+            return res.status(404).json({ message: `Task with id ${id} not found` });
+        }
+        const deleted = await TaskModel.deleteTask(id);
+        if (deleted) {
+            res.status(200).json({ message: 'Task deleted successfully from the list' });
+        } else {
+            res.status(500).json({ message: 'Error deleting task' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting task', error: error.message });
     }
-    TaskModel.deleteTask(id);
-    res.status(200).json({ message: 'Task deleted successfully from the list' });
 };
