@@ -8,10 +8,35 @@ import { connectToDB } from './dbConnections/mongoDb/db.js'; // uncomment this l
 import { connectToDB as connectToPostgresDB } from './dbConnections/postgreSQL/db.js';
 import express from 'express';
 import taskCRUDRoutes from './src/routes/taskRoutes.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJSDoc from 'swagger-jsdoc';
+
 
 const app = express();
 const port = process.env.PORT || 3000;
 const api_uri = process.env.LOCALHOST_URI + port;
+const swaggerUI = swaggerUi;
+const swaggerJavascriptDoc = swaggerJSDoc;
+
+// Swagger setup
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Task Management API',
+      version: '1.0.0',
+      description: 'API Documentation for a task manager application',
+    },
+    servers: [
+      { url: 'http://localhost:3000' },
+    ],
+  },
+  apis: ['./src/routes/*.js', './src/controllers/*.js'], // Path to the API docs
+};
+
+const swaggerSpecs = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 app.use(cors());
 app.use(express.json()); // Middleware to parse JSON bodies
