@@ -28,6 +28,18 @@ import { getTasks, addTask, deleteTask } from '../controllers/taskControllers.js
  *         title: "First Task"
  *         description: "It's my first task !"
  *         createdAt: "2023-01-01T00:00:00Z"
+ *     DeleteSuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: integer
+ *           description: The HTTP status code
+ *         message:
+ *           type: string
+ *           description: Deletion success message
+ *       example:
+ *         status: 200
+ *         message: "Task successfully deleted"
  *     BadRequest:
  *       type: object
  *       properties:
@@ -90,7 +102,54 @@ import { getTasks, addTask, deleteTask } from '../controllers/taskControllers.js
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ServerError'
+ *
+ * /tasks-list:
+ *   get:
+ *     summary: Fetch the tasks list
+ *     tags:
+ *       - Tasks
+ *     responses:
+ *       '200':
+ *         description: Tasks list successfully fetched
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Task'
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ServerError'
+ * 
+ * /delete-task/{id}:
+ *   delete:
+ *     summary: Delete a task by ID
+ *     tags:
+ *       - Tasks
+ *     responses:
+ *       '200':
+ *         description: Task successfully deleted and removed from the list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DeleteSuccess'
+ *       '400':
+ *         description: Bad request (e.g., missing id parameter)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ServerError'
  */
+
 const router = express.Router();
 
 router.get('/tasks-list', getTasks);
