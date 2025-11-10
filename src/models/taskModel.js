@@ -5,13 +5,13 @@
  * { id: string, title: string, description: string }
  */
 
-// import mongoose from "mongoose";
+import mongoose from "mongoose";
 
 /**
  * Define the Mongoose schema for tasks
  */
 
-/*
+
 
 const tasksSchema = new mongoose.Schema({
     title: {
@@ -35,12 +35,11 @@ const tasksSchema = new mongoose.Schema({
 const Task = mongoose.model('Task', tasksSchema);
 
 class TaskModel {
-    /* No longer needed since we initialize tasks from the Mongoose Schema above
+    // No longer needed since we initialize tasks from the Mongoose Schema above
     constructor() {
         this.tasks = []; // empty list by default
     }
-    */
-/*
+
     
     // Fetch all tasks
     async fetchAllTasks() {
@@ -88,9 +87,11 @@ class TaskModel {
 }
 
 export default new TaskModel();
-/* → Uncomment all lines above to use MongoDB with Mongoose ← */
 
-// Implementaiton with PostgreSQL below
+/* → Uncomment all lines below to use PostgreSQL ← */
+
+/*
+// Implementation with PostgreSQL below
 import pool from "../../dbConnections/postgreSQL/db.js";
 
 class TaskModel {
@@ -149,3 +150,4 @@ class TaskModel {
 }
 
 export default new TaskModel();
+*/
